@@ -14,25 +14,41 @@ export class HomePage {
   scannedCode = null;
   elementType: 'url' | 'canvas' | 'img' = 'canvas';
 
-  constructor( private barcode : BarcodeScanner, private b64 : Base64ToGallery
-    ,private toast: ToastController) {
+  constructor(private barcode: BarcodeScanner, private b64: Base64ToGallery
+    , private toast: ToastController) {
 
   }
-  scanQRCode(){
+  scanQRCode() {
     this.barcode.scan().then(
-      data =>{
-        this.scannedCode = data;
+      data => {
+        this.scannedCode = data.text;
       }
     );
 
 
 
   }
-downloadQRCode(){
+  downloadQRCode() {
 
-  
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    const imageData = canvas.toDataURL('image/jpeg').toString();
+    console.log('data: ', imageData);
 
-}
+    let urlData = imageData.split(',')[1];
+    this.b64.base64ToGallery(urlData,
+      { prefix: '_img', mediaScanner: true }).
+      then(async res => {
+        let newToast = await this.toast.create({
+          header: 'QR Code saved '
+        });
+        newToast.present();
+
+      }, err => console.log('error: ', err)
+      );
+
+
+  }
+
 
 
 }
