@@ -1,0 +1,7 @@
+{
+  "name": "QrCode",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
